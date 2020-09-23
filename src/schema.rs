@@ -2,7 +2,7 @@ table! {
     smss (id) {
         id -> Uuid,
         tel -> Varchar,
-        code -> Int4,
+        code -> Varchar,
         created_at -> Timestamp,
     }
 }

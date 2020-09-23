@@ -2,12 +2,12 @@
 extern crate actix_web;
 #[macro_use]
 extern crate diesel;
-
+extern crate dotenv;
 extern crate rand;
 
 
 use std::{env, io};
-
+use dotenv::dotenv;
 use actix_web::{middleware, App, HttpServer};
 use diesel::r2d2::ConnectionManager;
 use diesel::PgConnection;
@@ -23,6 +23,7 @@ pub type DBPooledConnection = PooledConnection<ConnectionManager<PgConnection>>;
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
+    dotenv().ok();
     env::set_var("RUST_LOG", "actix_web=debug,actix_server=info");
     env_logger::init();
 

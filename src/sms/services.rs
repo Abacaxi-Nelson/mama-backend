@@ -62,7 +62,7 @@ impl SmsDB {
             id: self.id.to_string(),
             created_at: Utc.from_utc_datetime(&self.created_at),
             tel: self.tel.clone(),
-            code: self.code,
+            code: self.code.clone(),
         }
     }
 }
@@ -95,15 +95,21 @@ pub async fn create(sms_req: Json<SmsRequest>, pool: Data<DBPool>) -> HttpRespon
 }
 
 #[get("/sms/{id}/{code}")]
-pub async fn get(path: Path<(String,)>, pool: Data<DBPool>) -> HttpResponse {
+pub async fn get(web::Path((id, code)): web::Path<(String, String)>, pool: Data<DBPool>) -> HttpResponse {
     let conn = pool.get().expect(CONNECTION_POOL_ERROR);
-    let sms = web::block(move || find_sms(Uuid::from_str(path.0.as_str()).unwrap(), &conn)).await;
+    let sms = web::block(move || find_sms(Uuid::from_str(id.as_str()).unwrap(), &conn)).await;
+
+    
+    
 
     match sms {
         Ok(sms) => {
+            println!("sms.code={}", &sms.code);
+            println!("code={}", code);
+
             HttpResponse::Ok()
             .content_type(APPLICATION_JSON)
-            .json(JsonVal{success: path.1 == sms.code})
+            .json(JsonVal{success: code.eq(&sms.code)})
         }
         _ => HttpResponse::NoContent()
             .content_type(APPLICATION_JSON)

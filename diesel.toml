@@ -3,3 +3,6 @@
 
 [print_schema]
 file = "src/schema.rs"
+#import_types = ["diesel::sql_types::*", "crate::sql_types::*", "crate::enum_role::*"]   # <- note the extra import
+#import_types = ["diesel::sql_types::*", "crate::enum_role::*"]   # <- note the extra import
+

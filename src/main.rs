@@ -17,9 +17,14 @@ mod constants;
 mod response;
 mod sms;
 mod schema;
-
+mod user;
+mod family;
+mod user_family;
 pub type DBPool = Pool<ConnectionManager<PgConnection>>;
 pub type DBPooledConnection = PooledConnection<ConnectionManager<PgConnection>>;
+
+//curl -X POST -d '{"tel": "064857458"}' -H "Content-type: application/json" http://localhost:9090/sms
+//curl http://localhost:9090/sms/813bd9f8-46f3-4705-9e9c-4f6819ded89f/9094641
 
 #[actix_rt::main]
 async fn main() -> io::Result<()> {
@@ -43,15 +48,10 @@ async fn main() -> io::Result<()> {
             // register HTTP requests handlers
             .service(sms::services::get)
             .service(sms::services::create)
-            /*
-            .service(tweet::list)
-            .service(tweet::get)
-            .service(tweet::create)
-            .service(tweet::delete)
-            .service(like::list)
-            .service(like::plus_one)
-            .service(like::minus_one)
-            */
+            .service(user::services::get)
+            .service(user::services::create)
+            .service(family::services::get)
+            .service(family::services::create)
     })
     .bind("0.0.0.0:9090")?
     .run()

@@ -1,4 +1,4 @@
-use actix_web::web::{Data, Json, Path};
+use actix_web::web::{Data, Json};
 use actix_web::{web, HttpResponse};
 use chrono::{DateTime, NaiveDateTime, TimeZone, Utc};
 use diesel::result::Error;
@@ -8,11 +8,10 @@ use uuid::Uuid;
 use rand::Rng;
 
 use crate::constants::{APPLICATION_JSON, CONNECTION_POOL_ERROR};
-use crate::response::Response;
 use crate::response::JsonVal;
 use crate::{DBPool, DBPooledConnection};
 use crate::schema::smss;
-use diesel::query_dsl::methods::{FilterDsl, LimitDsl, OrderDsl};
+use diesel::query_dsl::methods::{FilterDsl};
 use std::str::FromStr;
 
 #[derive(Debug, Deserialize, Serialize)]
